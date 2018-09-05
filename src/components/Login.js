@@ -3,11 +3,12 @@ import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 import LoginHeader from './LoginHeader';
 import { TextField, Divider, Button } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const styles = {
   root: {
-    width: 450,
-    height: 500
+    width: 450
+    // height: 500
   },
   loginContainer: {
     display: 'flex',
@@ -20,7 +21,7 @@ const styles = {
     padding: '8px 44px'
   },
   inputField: {
-    margin: '36px auto'
+    margin: '24px auto'
   },
   formActions: {
     display: 'flex',
@@ -29,35 +30,66 @@ const styles = {
   },
   baseBtn: {
     textTransform: 'capitalize'
-  }
+  },
+  fpassBtn: { color: '#1a73e8', fontSize: 14, cursor: 'pointer' }
 };
 
 class Login extends Component {
+  state = {
+    nextStep: false
+  };
+
+  handleNext = e => {
+    e.preventDefault();
+
+    this.setState({ nextStep: true });
+  };
+
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.loginContainer}>
         <Paper className={classes.root}>
           <LoginHeader>Login</LoginHeader>
           <Divider />
           <div className={classes.loginBody}>
-            <TextField
-              label="E-mail"
-              type="email"
-              className={classes.inputField}
-              autoFocus
-              fullWidth
-            />
+            {this.state.nextStep ? (
+              <TextField
+                label="Password"
+                type="password"
+                autoFocus
+                fullWidth
+                className={classes.inputField}
+              />
+            ) : (
+              <TextField
+                label="E-mail"
+                type="email"
+                autoFocus
+                fullWidth
+                className={classes.inputField}
+              />
+            )}
+
             <div className={classes.formActions}>
+              {this.state.nextStep ? (
+                <ButtonBase className={classes.fpassBtn}>Forgot password?</ButtonBase>
+              ) : (
+                <Button
+                  variant="text"
+                  color="primary"
+                  className={classes.baseBtn}
+                  style={{ paddingLeft: 0 }}>
+                  Create Account
+                </Button>
+              )}
               <Button
-                variant="text"
+                variant="contained"
                 color="primary"
                 className={classes.baseBtn}
-                style={{ paddingLeft: 0 }}>
-                Create Account
-              </Button>
-              <Button variant="contained" color="primary" className={classes.baseBtn}>
-                Login
+                onClick={this.handleNext}>
+                {this.state.nextStep ? 'Login' : 'Next'}
               </Button>
             </div>
           </div>
